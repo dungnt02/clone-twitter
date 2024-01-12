@@ -1,5 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import { checkSchema } from 'express-validator'
+import databaseService from '~/services/database.services'
+import usersService from '~/services/users.services'
 const usersValidate = (req: Request, res: Response, next: NextFunction) => {
   const { email, password } = req.body
   if (!email || !password) {
@@ -23,7 +25,16 @@ export const registerValidator = checkSchema({
   email: {
     notEmpty: true,
     isEmail: true,
-    trim: true
+    trim: true,
+    custom: {
+      options: async (value) => {
+        const isExistEmail = await usersService.checkEmailExits(value)
+        if (isExistEmail) {
+          throw new Error('Email already exists')
+        }
+        return true
+      }
+    }
   },
   password: {
     notEmpty: true,
