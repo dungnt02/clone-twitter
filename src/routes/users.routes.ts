@@ -4,7 +4,7 @@ import usersValidate, { registerValidator } from '~/middlewares/users.middleware
 import { validate } from '~/utils/validation'
 const userRouter = Router()
 
-userRouter.post('/login', usersValidate, loginController)
+userRouter.post('/login', validate(usersValidate), loginController)
 
 userRouter.post('/register', validate(registerValidator), registerController)
 
