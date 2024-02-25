@@ -6,9 +6,9 @@ import { EntityError, ErrorWithStatus } from '~/models/Errors'
 // can be reused by many routes
 
 // sequential processing, stops running validations chain if the previous one fails.
-export const validate = (validations: RunnableValidationChains<ValidationChain>) => {
+export const validate = (validation: RunnableValidationChains<ValidationChain>) => {
   return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    await validations.run(req)
+    await validation.run(req)
     const errors = validationResult(req)
     //Không có lỗi thì next tiếp tục request
     if (errors.isEmpty()) {
